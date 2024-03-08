@@ -27,3 +27,8 @@ build:
 	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) build
 	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) build
 
+clean:
+	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) clean
+	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) clean
+	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) clean
+		cd "$(BASEDIR)/apps/ingress/" && $(MAKE) clean

@@ -17,22 +17,24 @@ include ../../../Makefile.properties
 
 app: build deploy
 
-build: main
-	docker build "$(BASEDIR)/../containers/." --tag=$(DOCKERREPO):api
-	docker push $(DOCKERREPO):api
+build:
+	docker build "$(BASEDIR)/../containers/." --tag=$(DOCKERREPO):game
+	docker push $(DOCKERREPO):game
 
 deploy: deployment service
 
 deployment:
-	kubectl create deployment game-deployment --image="$(DOCKERREPO)":game  --port=8080
+#	kubectl create deployment game-deployment  --replicas=4 --image="$(DOCKERREPO)":game  --port=8080
+#	kubectl label deployment game-deployment app=game --overwrite
+	kubectl apply -f "$(BASEDIR)/game.yaml"
 
 service:
-	kubectl expose deployment game-deployment --name=game --labels="app=game"
+	kubectl expose deployment game-deployment --target-port=8080  --type=NodePort --name=game --labels="app=game"
 
 clean: clean.deployment clean.service 
 
 clean.deployment: 
-	-kubectl delete deployment api-deployment
+	-kubectl delete deployment game-deployment
 	
 clean.service: 
-	-kubectl delete service api
+	-kubectl delete service game

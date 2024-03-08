@@ -16,7 +16,7 @@ BASEDIR = $(shell pwd)
 include ../../Makefile.properties
 
 deploy: 
-  -kubectl apply -f "$(BASEDIR)/ingress.yaml"
+	kubectl apply -f "$(BASEDIR)/ingress.yaml"
 
 clean: 
-  -kubectl delete -f "$(BASEDIR)/ingress.yaml"
+	kubectl delete -f "$(BASEDIR)/ingress.yaml"

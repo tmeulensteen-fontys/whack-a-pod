@@ -1,4 +1,4 @@
-BASEDIR = $(pwd)
+BASEDIR = $(shell pwd)
 
 main:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$(BASEDIR)/../containers/main" "$(BASEDIR)/../containers/main.go"

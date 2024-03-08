@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var interval = Math.random() * 200000;
     document.querySelector("#bomb").addEventListener("click", bombClickHandler);
     document.querySelector("#deploy-start").addEventListener("click", startDeployment);
-    document.querySelector("#restart").addEventListener("click", restart);
+    document.querySelector("#restart").addEventListener("click", startDeployment);
 });
 
 function setReport(msg, color){
@@ -159,7 +159,7 @@ function bombBlastHandler(e){
     for (var i = 0; i < e.items.length; i++){
         var pod = e.items[i];
         if (pod.status.phase == "Running"){
-            killPod(pod.metadata.selfLink);
+            killPod(pod.metadata.name);
         }
     }
     bombUI.Explode();
