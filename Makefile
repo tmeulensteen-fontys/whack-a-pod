@@ -16,86 +16,14 @@ BASEDIR = $(shell pwd)
 
 include Makefile.properties
 
-deploy: env creds
+deploy: 
 	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) deploy
 	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) deploy
 	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) deploy
 	cd "$(BASEDIR)/apps/ingress/" && $(MAKE) deploy
-
-reset.safe: env creds
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) reset.safe
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) reset.safe
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) reset.safe
-
-deploy.minikube: creds.minikube
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) deploy.minikube
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) deploy.minikube
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) deploy.minikube
-	cd "$(BASEDIR)/apps/ingress/" && $(MAKE) deploy.minikube
-
-deploy.minikube.dockerhub: creds.minikube
-	minikube addons enable ingress
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) deploy.minikube.dockerhub
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) deploy.minikube.dockerhub
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) deploy.minikube.dockerhub
-	cd "$(BASEDIR)/apps/ingress/" && $(MAKE) deploy.minikube
-	@printf -- "*** DONE ***\n"
-	@printf -- "add the following line to your /etc/hosts file:\n\n"
-	@printf -- "$(shell minikube ip) minikube.wap\n\n"
-
-deploy.generic: 
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) deploy.generic
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) deploy.generic
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) deploy.generic
-	cd "$(BASEDIR)/apps/ingress/" && $(MAKE) deploy.generic
-
-deploy.generic.dockerhub: 
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) deploy.generic.dockerhub
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) deploy.generic.dockerhub
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) deploy.generic.dockerhub
-
-clean: env creds
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) clean
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) clean
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) clean	
-	cd "$(BASEDIR)/apps/ingress/" && $(MAKE) clean
-
-clean.generic: 
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) clean.generic
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) clean.generic
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) clean.generic
-	cd "$(BASEDIR)/apps/ingress/" && $(MAKE) clean.generic
-
-clean.minikube: 
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) clean.minikube
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) clean.minikube
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) clean.minikube	
-	cd "$(BASEDIR)/apps/ingress/" && $(MAKE) clean.minikube
-
-clean.minikube.dockerhub: 
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) clean.minikube
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) clean.minikube
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) clean.minikube.dockerhub
-	cd "$(BASEDIR)/apps/ingress/" && $(MAKE) clean.minikube
 
 build:
 	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) build
 	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) build
 	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) build
 
-build.dockerhub:
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) build.dockerhub
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) build.dockerhub
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) build.dockerhub
-
-build.generic: 
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) build.generic
-	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) build.generic
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) build.generic
-
-config: env creds
-	@cd "$(BASEDIR)/apps/ingress/" && $(MAKE) config
-
-test: 
-	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) test
-	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) test	

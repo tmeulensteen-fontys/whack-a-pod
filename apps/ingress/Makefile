@@ -11,9 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-PROJECT=[Fontys Openday 2024]
-#ZONE=us-central1-c
-#REGION=us-central1
-#CLUSTER=whack-a-pod
-INGRESSNAME=whack-a-pod-ingress
-DOCKERREPO=tommeulensteen/whack-a-pod
+BASEDIR = $(shell pwd)
+
+include ../../Makefile.properties
+
+deploy: 
+  -kubectl apply -f "$(BASEDIR)/ingress.yaml"
+
+clean: 
+  -kubectl delete -f "$(BASEDIR)/ingress.yaml"
