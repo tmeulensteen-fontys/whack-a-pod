@@ -17,75 +17,22 @@ include ../../../Makefile.properties
 
 app: build deploy
 
-reset: clean.deployment app
-	say "app refresh complete"
-
-reset.safe: env creds
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$(BASEDIR)/../containers/main" "$(BASEDIR)/../containers/main.go"
-	gcloud container builds submit "$(BASEDIR)/../containers/." --tag=$(DOCKERREPO)/api
-	-kubectl delete deployment api-deployment
-	-kubectl run api-deployment --image=$(DOCKERREPO)/api --replicas=12 --port=8080 --labels=app=api 
-	say "app refresh complete"		
-
-main:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$(BASEDIR)/../containers/main" "$(BASEDIR)/../containers/main.go"
-
-build: env main
-	gcloud container builds submit "$(BASEDIR)/../containers/." --tag=$(DOCKERREPO)/api
-
-build.dockerhub: main
+build: main
 	docker build "$(BASEDIR)/../containers/." --tag=$(DOCKERREPO):api
 	docker push $(DOCKERREPO):api
 
-build.generic: main
-	docker build "$(BASEDIR)/../containers/." --tag=$(DOCKERREPO)/whackapod-api
-	docker push $(DOCKERREPO)/whackapod-api
-
-deploy: env creds deployment service
-
-deploy.minikube: deployment service
-
-deploy.minikube.dockerhub:
-	kubectl run api-deployment --image=$(DOCKERREPO):api --replicas=12 --port=8080 --labels=app=api
-	kubectl expose deployment api-deployment --name=api --target-port=8080  --type=NodePort --labels="app=api"
-
-deploy.generic: 
-	kubectl run api-deployment --image=$(DOCKERREPO)/whackapod-api --replicas=12 --port=8080 --labels=app=api 
-	kubectl expose deployment api-deployment --name=api --target-port=8080  --type=NodePort --labels="app=api"
-
-deploy.generic.dockerhub: 
-	kubectl run api-deployment --image=$(DOCKERREPO):api --replicas=12 --port=8080 --labels=app=api 
-	kubectl expose deployment api-deployment --name=api --target-port=8080  --type=NodePort --labels="app=api"
-
-test: 
-	cd 	"$(BASEDIR)/../containers" && go test
+deploy: deployment service
 
 deployment:
-	kubectl run api-deployment --image=$(DOCKERREPO)/api --replicas=12 --port=8080 --labels=app=api 
+	kubectl create deployment game-deployment --image="$(DOCKERREPO)":game  --port=8080
 
 service:
-	kubectl expose deployment api-deployment --name=api --target-port=8080  --type=NodePort --labels="app=api"
+	kubectl expose deployment game-deployment --name=game --labels="app=game"
 
-clean: env creds clean.deployment clean.service 
-clean.generic: clean.deployment clean.service 
-
-clean.minikube: clean.deployment clean.service 
+clean: clean.deployment clean.service 
 
 clean.deployment: 
 	-kubectl delete deployment api-deployment
 	
 clean.service: 
 	-kubectl delete service api
-
-retry: clean build deploy
-
-config: env 
-	@echo Creating API Yaml files based on samples and setting in your Makefile.properties
-	@cp "$(BASEDIR)/api-deployment.sample.yaml" "$(BASEDIR)/api-deployment.yaml"
-	$(call rewritefile,"$(BASEDIR)/api-deployment.yaml",%PROJECT%,$(PROJECT))
-
-define rewritefile
-	@sed s/$(2)/$(3)/g <""$(1)"" >"$(BASEDIR)/.temp"
-	@cp "$(BASEDIR)/.temp" $(1)
-	@rm "$(BASEDIR)/.temp" 
-endef

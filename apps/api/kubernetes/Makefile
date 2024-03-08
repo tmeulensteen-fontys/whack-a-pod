@@ -24,7 +24,7 @@ build: main
 deploy: deployment service
 
 deployment: 
-	kubectl create deployment api-deployment --image="$DOCKERREPO":api --port=8080 
+	kubectl create deployment api-deployment --image="$(DOCKERREPO)":api --port=8080 
 	kubectl expose deployment api-deployment --name=api --labels="app=api"
 
 service:
