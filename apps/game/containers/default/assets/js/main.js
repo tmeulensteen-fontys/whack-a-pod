@@ -36,8 +36,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var interval = Math.random() * 200000;
     document.querySelector("#bomb").addEventListener("click", bombClickHandler);
     document.querySelector("#deploy-start").addEventListener("click", startDeployment);
-    document.querySelector("#restart").addEventListener("click", startDeployment);
+    document.querySelector("#restart").addEventListener("click", restart);
 });
+
+function restart(){
+    location.reload();
+}
+
 
 function setReport(msg, color){
     if (typeof color == "undefined") color = "#333333";
