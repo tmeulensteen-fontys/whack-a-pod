@@ -23,7 +23,7 @@ var game = new GAME();
 var clock = "";
 var score = new SCORE();
 var sounds = new SOUNDS();
-sounds.SetWhack("assets/audio/pop.wav",.5);
+sounds.SetWhack("assets/audio/splush.mp3",.5);
 sounds.SetExplosion("assets/audio/explosion.wav",.5);
 sounds.SetCountdown("assets/audio/countdown.mp3",.5);
 sounds.SetStartup("assets/audio/startup.mp3",.5);
