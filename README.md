@@ -25,9 +25,13 @@ service and to simulate creating and destroying nodes.
 ## Getting Started
 
 ### Install kubectl
-The current directions assume you have kubectl installed and pointed to the installable kubernetes cluster. If not, install it using the command below
+The current directions assume you have kubectl installed and pointed to the installable kubernetes cluster. If not, download it using the command below
 ```
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+```
+Install it.
+```
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 ```
 
 ### Install make
