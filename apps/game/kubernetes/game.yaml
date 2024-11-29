@@ -17,6 +17,6 @@ spec:
       containers:
       - name: game-deployment
         image: tommeulensteen/whack-a-pod:game
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

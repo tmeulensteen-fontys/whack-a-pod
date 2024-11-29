@@ -17,6 +17,6 @@ spec:
       containers:
       - name: api-deployment
         image: zephinzer/eg-whack-a-pod:api
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

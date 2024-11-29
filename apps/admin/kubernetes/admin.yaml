@@ -17,7 +17,7 @@ spec:
       containers:
       - name: admin-deployment
         image: tommeulensteen/whack-a-pod:admin
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
           - name: APIIMAGE
             value: zephinzer/eg-whack-a-pod:api

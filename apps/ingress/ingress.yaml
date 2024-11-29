@@ -28,4 +28,4 @@ spec:
             name: game
             port: 
               number: 8080
-    host: whackapod.example.com
+    host: whackapod2.example.com

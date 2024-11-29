@@ -105,8 +105,13 @@ function handleColor(e){
 
 function handleColorError(e,textStatus, errorThrown){
     if (game.GetState() == "running") {
-        setReport("Kubernetes service is DOWN!", "#FF0000");
-        alertYouKilledIt();
+        if (api.IsHardFail()){
+            console.log("Hard service fail.");
+            setReport("Kubernetes service is DOWN!", "#FF0000");
+            alertYouKilledIt();
+        } else {
+            console.log("Soft service fail. Retry");
+        }
     }
 }
 
