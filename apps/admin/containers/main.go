@@ -21,6 +21,7 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"os"
 
 	"github.com/gorilla/mux"
 )
@@ -31,16 +32,23 @@ var (
 	token               = ""
 	errItemNotExist     = fmt.Errorf("Item does not exist")
 	errItemAlreadyExist = fmt.Errorf("Item already exists")
+	root             	= "https://kubernetes.default.svc.cluster.local"
+	namespace			= ""
 )
 
 const (
-	root             = "https://kubernetes"
 	selector         = "app=api"
 	defaultTokenPath = "/var/run/secrets/kubernetes.io/serviceaccount/token"
 	defaultCertPath  = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+	defaultNamespacePath = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
 )
 
 func main() {
+	rootTemp, ex_url := os.LookupEnv("CLUSTER_API_URL")
+	if ex_url {
+		root = string(rootTemp)
+	}
+	log.Printf("API URL: " + root )
 	log.Printf("starting whack a pod admin api")
 	var err error
 
@@ -52,8 +60,14 @@ func main() {
 
 	certs, err := ioutil.ReadFile(defaultCertPath)
 	if err != nil {
-		log.Printf("could not get token from file system: %v", err)
+		log.Printf("could not get cert from file system: %v", err)
 	}
+
+	c, err := ioutil.ReadFile(defaultNamespacePath)
+	if err != nil {
+		log.Printf("could not get namespace from file system: %v", err)
+	}
+	namespace = string(c)
 
 	// This allows me to use a scratch Dockerfile as described here :
 	// https://medium.com/@kelseyhightower/optimizing-docker-images-for-static-binaries-b5696e26eb07

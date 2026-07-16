@@ -19,7 +19,8 @@ app: build deploy
 
 main:
 	go get github.com/gorilla/mux
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$(BASEDIR)/../containers/main" "$(BASEDIR)/../containers/main.go" "$(BASEDIR)/../containers/kubernetes.go"	
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on \
+	go build -o "$(BASEDIR)/../containers/main" "$(BASEDIR)/../containers/main.go" "$(BASEDIR)/../containers/kubernetes.go"	
 
 build: main
 	docker build "$(BASEDIR)/../containers/." --tag=$(DOCKERREPO):admin

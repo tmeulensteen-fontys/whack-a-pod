@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: wap-ingress
 spec:
+  ingressClassName: nginx
   rules:
   - http:
       paths:
@@ -27,4 +28,4 @@ spec:
             name: game
             port: 
               number: 8080
-    host: whackapod2.example.com
+    host: whackapod.example.com

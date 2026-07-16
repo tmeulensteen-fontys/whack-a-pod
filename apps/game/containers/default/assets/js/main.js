@@ -23,7 +23,7 @@ var game = new GAME();
 var clock = "";
 var score = new SCORE();
 var sounds = new SOUNDS();
-sounds.SetWhack("assets/audio/splush.mp3",.5);
+sounds.SetWhack("assets/audio/pop.wav",.5);
 sounds.SetExplosion("assets/audio/explosion.wav",.5);
 sounds.SetCountdown("assets/audio/countdown.mp3",.5);
 sounds.SetStartup("assets/audio/startup.mp3",.5);
@@ -36,13 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var interval = Math.random() * 200000;
     document.querySelector("#bomb").addEventListener("click", bombClickHandler);
     document.querySelector("#deploy-start").addEventListener("click", startDeployment);
-    document.querySelector("#restart").addEventListener("click", restart);
+    document.querySelector("#restart").addEventListener("click", restartHandler);
 });
-
-function restart(){
-    location.reload();
-}
-
 
 function setReport(msg, color){
     if (typeof color == "undefined") color = "#333333";
@@ -103,15 +98,23 @@ function handleColor(e){
     
 }
 
-function handleColorError(e,textStatus, errorThrown){
+function handleColorError(e, textStatus, errorThrown) {
     if (game.GetState() == "running") {
-        if (api.IsHardFail()){
-            console.log("Hard service fail.");
-            setReport("Kubernetes service is DOWN!", "#FF0000");
-            alertYouKilledIt();
-        } else {
-            console.log("Soft service fail. Retry");
-        }
+        setReport("Kubernetes service is DOWN!", "#FF0000");
+
+        // Wacht 800ms en controleer dan of hij nog steeds down is
+        setTimeout(function() {
+            api.Color(
+                // Als de service weer UP is, doe niks
+                function() {
+                    setReport("Kubernetes service recovered.", "#00CC00");
+                },
+                // Als hij nog steeds DOWN is, toon de alert
+                function() {
+                    alertYouKilledIt();
+                }
+            );
+        }, 200);
     }
 }
 
@@ -169,10 +172,14 @@ function bombBlastHandler(e){
     for (var i = 0; i < e.items.length; i++){
         var pod = e.items[i];
         if (pod.status.phase == "Running"){
-            killPod(pod.metadata.name);
+            killPod("/api/v1/namespaces/" + pod.metadata.namespace + "/pods/" + pod.metadata.name);
         }
     }
     bombUI.Explode();
+}
+
+function restartHandler(){
+    location.reload();
 }
 
 // Add functions below to lib.js
