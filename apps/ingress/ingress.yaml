@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: wap-ingress
 spec:
+  ingressClassName: traefik
   rules:
   - http:
       paths:

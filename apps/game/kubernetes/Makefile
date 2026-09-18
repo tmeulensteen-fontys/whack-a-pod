@@ -21,20 +21,8 @@ build:
 	docker build "$(BASEDIR)/../containers/." --tag=$(DOCKERREPO):game
 	docker push $(DOCKERREPO):game
 
-deploy: deployment service
-
-deployment:
-#	kubectl create deployment game-deployment  --replicas=4 --image="$(DOCKERREPO)":game  --port=8080
-#	kubectl label deployment game-deployment app=game --overwrite
+deploy:
 	kubectl apply -f "$(BASEDIR)/game.yaml"
 
-service:
-	kubectl expose deployment game-deployment --target-port=8080  --type=NodePort --name=game --labels="app=game"
-
-clean: clean.deployment clean.service 
-
-clean.deployment: 
-	-kubectl delete deployment game-deployment
-	
-clean.service: 
-	-kubectl delete service game
+clean:
+	-kubectl delete -f "$(BASEDIR)/game.yaml"

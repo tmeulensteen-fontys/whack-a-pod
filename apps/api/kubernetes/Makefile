@@ -24,20 +24,8 @@ build: main
 	docker build "$(BASEDIR)/../containers/." --tag=$(DOCKERREPO):api
 	docker push $(DOCKERREPO):api
 
-deploy: deployment service
-
-deployment: 
-#	kubectl create deployment api-deployment --replicas=12 --image=$(DOCKERREPO):api --port=8080 
-#	kubectl label deployment api-deployment app=api --overwrite
+deploy:
 	kubectl apply -f "$(BASEDIR)/api.yaml"
 
-service:
-	kubectl expose deployment api-deployment --target-port=8080  --type=NodePort --name=api --labels="app=api"
-
-clean: clean.deployment clean.service 
-
-clean.deployment: 
-	-kubectl delete deployment api-deployment
-	
-clean.service: 
-	-kubectl delete service api
+clean:
+	-kubectl delete -f "$(BASEDIR)/api.yaml"

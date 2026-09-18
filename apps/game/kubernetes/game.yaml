@@ -14,9 +14,32 @@ spec:
       labels:
         app: game
     spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: game-deployment
         image: tommeulensteen/whack-a-pod:game
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: game
+  labels:
+    app: game
+spec:
+  type: NodePort
+  selector:
+    app: game
+  ports:
+  - port: 8080
+    targetPort: 8080
