@@ -23,6 +23,8 @@ build:
 
 deploy:
 	kubectl apply -f "$(BASEDIR)/game.yaml"
+	# zelfde tag (:game) => apply ziet geen wijziging; restart forceert het pullen van de nieuwe image
+	kubectl rollout restart deployment/game-deployment
 
 clean:
 	-kubectl delete -f "$(BASEDIR)/game.yaml"

@@ -216,7 +216,7 @@ function bombBlastHandler(e){
     for (var i = 0; i < e.items.length; i++){
         var pod = e.items[i];
         if (pod.status.phase == "Running"){
-            killPod(pod.metadata.selfLink);
+            killPod("/api/v1/namespaces/" + pod.metadata.namespace + "/pods/" + pod.metadata.name);
         }
     }
     bombUI.Explode();

@@ -7,13 +7,6 @@ spec:
   rules:
   - http:
       paths:
-      - path: /api/
-        pathType: Prefix
-        backend:
-          service:
-            name: api
-            port:
-              number: 8080
       - path: /admin/
         pathType: Prefix
         backend:
@@ -26,6 +19,50 @@ spec:
         backend:
           service:
             name: game
-            port: 
+            port:
+              number: 8080
+    host: whackapod.example.com
+---
+# Traefik stuurt verkeer rechtstreeks naar pod-IP's. Wordt een pod net weggemikt,
+# dan faalt die ene request; met retry pakt Traefik direct een andere pod,
+# zodat de service via het externe IP niet "down" lijkt.
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: api-retry
+spec:
+  retry:
+    attempts: 4
+    initialInterval: 20ms
+---
+# Een weggemikte pod geeft vaak geen RST maar laat de connectie hangen. Zonder korte
+# timeouts wacht Traefik standaard 30s en komt de retry te laat voor de game (400ms).
+# Gekoppeld via annotatie op de api-Service (apps/api/kubernetes/api.yaml).
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: api-transport
+spec:
+  forwardingTimeouts:
+    dialTimeout: 100ms
+    responseHeaderTimeout: 150ms
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wap-ingress-api
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: default-api-retry@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+  - http:
+      paths:
+      - path: /api/
+        pathType: Prefix
+        backend:
+          service:
+            name: api
+            port:
               number: 8080
     host: whackapod.example.com

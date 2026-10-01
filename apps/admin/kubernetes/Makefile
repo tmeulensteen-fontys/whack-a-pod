@@ -26,6 +26,8 @@ build: main
 
 deploy:
 	kubectl apply -f "$(BASEDIR)/admin.yaml"
+	# zelfde tag (:admin) => apply ziet geen wijziging; restart forceert het pullen van de nieuwe image
+	kubectl rollout restart deployment/admin-deployment
 
 clean:
 	-kubectl delete -f "$(BASEDIR)/admin.yaml"

@@ -37,6 +37,9 @@ metadata:
   name: api
   labels:
     app: api
+  annotations:
+    # korte timeouts (zie apps/ingress/ingress.yaml), zodat Traefik snel naar een andere pod retryt
+    traefik.ingress.kubernetes.io/service.serverstransport: default-api-transport@kubernetescrd
 spec:
   type: NodePort
   selector:
