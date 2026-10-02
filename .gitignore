@@ -1,0 +1,6 @@
+# Gecompileerde Go-binaries (worden door `make build` gemaakt)
+apps/*/containers/main
+
+# Lokale kubectl-binary
+kubectl
+kubectl.exe
