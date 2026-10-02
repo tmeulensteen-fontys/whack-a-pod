@@ -98,7 +98,7 @@ function PodWatcher(log) {
     this.reset = function () { bekend = {}; };
 }
 
-var MOL_SVG = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9z"></path><path d="M4 7.5 12 12l8-4.5M12 12v9"></path></svg>';
+var MOL_IMG = "assets/img/mole.png";   // pixel-art mol mét eigen put, 264 x 288
 var SPINNER_SVG = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#663366" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9"></path></svg>';
 
 // Bouwt een pod-knop (mol in een gat). naamTekst: wat er als naam onder staat.
@@ -110,13 +110,17 @@ function podKnop(pod, naamTekst, klein, onWhack) {
     b.dataset.status = st;
     b.setAttribute("aria-label", (st === "running" ? "Whack pod " : "Pod ") + pod.metadata.name + " (" + STATUS_LABEL[st] + ")");
     var gat = el("div", "gat");
-    if (st === "running") {
-        var mol = el("div", "mol");
-        mol.innerHTML = '<div class="ogen"><span></span><span></span></div>' + MOL_SVG;
+    if (st === "running" || st === "terminating") {
+        // De mol heeft zijn eigen put, dus het CSS-gat verbergen we zolang hij er staat.
+        gat.classList.add("met-mol");
+        if (st === "terminating" && !klein) gat.appendChild(el("div", "mep", "WHACK!"));
+        var mol = el("div", st === "running" ? "mol" : "mol geraakt");
+        var img = el("img");
+        img.src = MOL_IMG;
+        img.alt = "";
+        img.draggable = false;
+        mol.appendChild(img);
         gat.appendChild(mol);
-    } else if (st === "terminating") {
-        if (!klein) gat.appendChild(el("div", "mep", "WHACK!"));
-        gat.appendChild(el("div", "mol geraakt"));
     } else {
         var w = el("div", "wacht");
         w.innerHTML = SPINNER_SVG;
