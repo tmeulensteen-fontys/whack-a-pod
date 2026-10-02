@@ -527,7 +527,7 @@ function DEPLOYMENTAPI(hostname, logwindow){
     };
 
     this.GetNodes = function(successHandler, errorHandler){
-        var url = getPodsURI();
+        var url = getNodesURI();
         $.ajax({
             url: url,
             success: successHandler,

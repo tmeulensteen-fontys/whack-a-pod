@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whack-a-Pod advanced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/opendag.css">
+</head>
+<body>
+<div class="pagina">
+
+  <header class="header">
+    <div class="header-binnen">
+      <a class="logo" href="opendag.html"><b>Fontys</b><span>HBO-ICT</span></a>
+      <nav class="menu" aria-label="Main menu">
+        <a href="opendag.html">Game</a>
+        <a class="actief" href="opendag-advanced.html">Advanced</a>
+      </nav>
+      <span class="label-pil">Explain mode</span>
+    </div>
+  </header>
+
+  <main class="main" style="gap:24px">
+    <section class="intro">
+      <div class="intro-tekst">
+        <h1 style="font-size:52px">Whack-a-Pod <span>advanced</span></h1>
+        <p>Look under the hood: deploy, scale, whack and lock nodes. Watch Kubernetes fix things by itself.</p>
+      </div>
+      <button type="button" class="knop knop-rand" id="reset" style="font-size:17px">Reset cluster</button>
+    </section>
+
+    <section class="paneel" aria-label="Deployment">
+      <div class="veldje">
+        <span>Deployment</span>
+        <span class="mono" style="font-size:17px;font-weight:600">api-deployment</span>
+        <span class="status-chip" id="dep-status">Not deployed</span>
+      </div>
+      <div class="veldje">
+        <span>Replicas (desired)</span>
+        <div class="teller">
+          <button type="button" id="min" aria-label="One replica fewer">−</button>
+          <span class="groot" id="desired">12</span>
+          <button type="button" id="plus" aria-label="One replica more">+</button>
+        </div>
+      </div>
+      <div class="mini-stats">
+        <div class="veldje"><span>Running</span><span class="groot" id="n-running">0</span></div>
+        <div class="veldje"><span>Pending</span><span class="groot amber" id="n-pending">0</span></div>
+        <div class="veldje"><span>Schedulable nodes</span><span class="groot" id="n-nodes">–</span></div>
+        <div class="veldje"><span>Service</span><span class="groot" id="n-service">–</span></div>
+      </div>
+      <div class="knoppen">
+        <button type="button" class="knop knop-geel" id="deploy" style="padding:14px 28px">Deploy</button>
+        <button type="button" class="knop knop-gevaar" id="undeploy">Delete deployment</button>
+      </div>
+    </section>
+
+    <div class="raster breed">
+      <section class="kolom" aria-label="Nodes" style="gap:18px">
+        <div id="nodes" class="kolom" style="gap:18px"></div>
+
+        <div class="wachtrij">
+          <div class="wachtrij-kop"><b>Scheduler queue</b><span>Pending pods — there is no schedulable node for them</span></div>
+          <span class="leeg" id="wachtrij-leeg">Empty. Every pod got a node.</span>
+          <div class="wachtrij-lijst" id="wachtrij"></div>
+        </div>
+      </section>
+
+      <aside class="zijkant">
+        <section class="concept" aria-label="Explanation" aria-live="polite">
+          <small>What is happening?</small>
+          <h2 id="c-titel"></h2>
+          <p id="c-tekst"></p>
+          <code id="c-cmd"></code>
+        </section>
+
+        <section class="events hoog" aria-label="Kubernetes events">
+          <div class="events-kop"><span class="knipper"></span>kubectl get events -w</div>
+          <div class="events-lijst" id="events"></div>
+        </section>
+
+        <section class="kaart probeer">
+          <h2>Try this</h2>
+          <span>1. Deploy and watch the scheduler spread the pods over the nodes.</span>
+          <span>2. Cordon a node: running pods stay, new pods no longer land on it. Try whacking one!</span>
+          <span>3. Drain a node: its pods move to the other nodes.</span>
+          <span>4. Cordon all nodes and whack a pod: watch the queue fill up. Uncordon one and see what happens.</span>
+          <span>The pod with the yellow border was the last one to answer a request to the service.</span>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-binnen">
+      <span>Fontys Hogeschool ICT · Open dag</span>
+      <span>Advanced: explain mode for the teacher</span>
+    </div>
+  </footer>
+</div>
+
+<script src="assets/js/opendag-common.js"></script>
+<script src="assets/js/opendag-advanced.js"></script>
+</body>
+</html>

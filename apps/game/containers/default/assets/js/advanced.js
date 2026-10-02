@@ -253,7 +253,8 @@ function killNode(e){
     var $killbtn = $("#" + e.currentTarget.id);
     var node = $killbtn.data("node");
     deploymentAPI.DrainNode(node);
-    $killbtn.click(resetNode);
+    // .click() stapelt handlers; eerst de oude weghalen, anders draaien drain en uncordon tegelijk
+    $killbtn.off("click").click(resetNode);
     $killbtn.addClass("reset");
     $killbtn.text("+");
 }
@@ -265,7 +266,7 @@ function resetNode(e){
     deploymentAPI.UncordonNode(node);
     $killbtn.removeClass("reset");
     $killbtn.text("X");
-    $killbtn.click(killNode);
+    $killbtn.off("click").click(killNode);
 
 }
 

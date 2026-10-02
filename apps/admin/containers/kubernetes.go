@@ -274,3 +274,34 @@ func deleteDeployment(depname string) ([]byte, error) {
 	return b, nil
 
 }
+
+func getDeployment(depname string) ([]byte, error) {
+	url := root + "/apis/apps/v1/namespaces/" + namespace + "/deployments/" + depname
+
+	b, status, err := queryK8sAPI(url, "GET", nil)
+	if err != nil {
+		return nil, fmt.Errorf("can't get deployment: %v", err)
+	}
+
+	if status == http.StatusNotFound {
+		return nil, errItemNotExist
+	}
+
+	return b, nil
+}
+
+func scaleDeployment(depname string, replicas int) ([]byte, error) {
+	url := root + "/apis/apps/v1/namespaces/" + namespace + "/deployments/" + depname
+
+	j := fmt.Sprintf("{\"spec\": {\"replicas\": %d}}", replicas)
+	b, status, err := queryK8sAPI(url, "PATCH", []byte(j))
+	if err != nil {
+		return nil, fmt.Errorf("can't scale deployment: %v", err)
+	}
+
+	if status == http.StatusNotFound {
+		return nil, errItemNotExist
+	}
+
+	return b, nil
+}

@@ -22,6 +22,7 @@ import (
 	"strings"
 	"time"
 	"os"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -38,6 +39,7 @@ var (
 
 const (
 	selector         = "app=api"
+	maxReplicas      = 18
 	defaultTokenPath = "/var/run/secrets/kubernetes.io/serviceaccount/token"
 	defaultCertPath  = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
 	defaultNamespacePath = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
@@ -116,6 +118,9 @@ var routes = []route{
 	{"GET", "/k8s/pods/delete", handleAPI(handlePodsDelete)},
 	{"GET", "/k8s/node/drain", handleAPI(handleNodeDrain)},
 	{"GET", "/k8s/node/uncordon", handleAPI(handleNodeUncordon)},
+	{"GET", "/k8s/node/cordon", handleAPI(handleNodeCordon)},
+	{"GET", "/k8s/deployment/get", handleAPI(handleDeploymentGet)},
+	{"GET", "/k8s/deployment/scale", handleAPI(handleDeploymentScale)},
 	{"GET", "/k8s/deployment/delete", handleAPI(handleDeploymentDelete)},
 	{"GET", "/k8s/deployment/create", handleAPI(handleDeploymentCreate)},
 }
@@ -231,6 +236,29 @@ func handleNodeUncordon(w http.ResponseWriter, r *http.Request) ([]byte, error) 
 	}
 
 	return b, nil
+}
+
+func handleNodeCordon(w http.ResponseWriter, r *http.Request) ([]byte, error) {
+
+	b, err := toggleNode(r.FormValue("node"), true)
+	if err != nil && err != errItemNotExist {
+		return nil, fmt.Errorf("could not cordon node : %v", err)
+	}
+
+	return b, nil
+}
+
+func handleDeploymentGet(w http.ResponseWriter, r *http.Request) ([]byte, error) {
+	return getDeployment("api-deployment")
+}
+
+func handleDeploymentScale(w http.ResponseWriter, r *http.Request) ([]byte, error) {
+	replicas, err := strconv.Atoi(r.FormValue("replicas"))
+	if err != nil || replicas < 1 || replicas > maxReplicas {
+		return nil, fmt.Errorf("replicas must be a number between 1 and %d", maxReplicas)
+	}
+
+	return scaleDeployment("api-deployment", replicas)
 }
 
 func sendJSON(w http.ResponseWriter, content string, status int) {

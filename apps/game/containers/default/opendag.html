@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" class="spel">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whack-a-Pod</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/opendag.css">
+</head>
+<body>
+<div class="spel-pagina">
+
+  <header class="spel-kop">
+    <span class="merk">Fontys</span>
+    <span class="sub">HBO-ICT</span>
+    <span class="streep"></span>
+    <span class="titel">Whack-a-Pod</span>
+    <span class="slogan">Whack all 12 pods before Kubernetes brings them back</span>
+    <span class="vul"></span>
+    <button type="button" class="knop knop-wit" id="reset">Reset</button>
+    <button type="button" class="knop knop-geel" id="start">Start game</button>
+  </header>
+
+  <section class="spel-stats" aria-label="Game status">
+    <div class="spel-stat paars"><span>Time</span><b id="tijd">0:30</b></div>
+    <div class="spel-stat"><span>Whacked</span><b id="gemept">0</b></div>
+    <div class="spel-stat"><span>Pods Running</span><b id="running">0/12</b></div>
+    <div class="spel-stat"><span>Restored by K8s</span><b id="hersteld">0</b></div>
+  </section>
+
+  <section class="spel-veld" id="veld" aria-label="Pods"></section>
+
+  <div class="spel-popup paars" id="welkom" role="status">
+    <b>Ready to whack?</b>
+    <span>Press Start game. Kubernetes rolls out 12 pods, and you whack them.</span>
+  </div>
+
+  <div class="spel-popup" id="plat" role="status" hidden>
+    <b>Service down!</b>
+    <span>For a moment, not a single pod could answer. +100 points</span>
+  </div>
+
+  <button type="button" class="ster" id="ster" hidden>
+    <svg width="44" height="44" viewBox="0 0 24 24" fill="#2B1A2B" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>
+    <span>Bonus! Whack all pods at once</span>
+  </button>
+
+  <div class="spel-popup" id="einde" role="dialog" aria-modal="true" aria-labelledby="einde-titel" hidden>
+    <b id="einde-titel">Time's up!</b>
+    <span id="einde-tekst">Kubernetes held its ground.</span>
+    <div class="totalen" style="width:100%">
+      <div><span>Pods whacked</span><b id="tot-pods">0</b></div>
+      <div><span>Service down</span><b id="tot-plat">0</b></div>
+      <div><span>Points</span><b id="tot-punten">0</b></div>
+    </div>
+    <button type="button" class="knop-paars" id="opnieuw">Play again</button>
+  </div>
+</div>
+
+<script src="assets/js/opendag-common.js"></script>
+<script src="assets/js/opendag.js"></script>
+</body>
+</html>
