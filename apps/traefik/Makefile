@@ -16,6 +16,9 @@ BASEDIR = $(shell pwd)
 include ../../Makefile.properties
 
 deploy:
+	# CRDs eerst (server-side: te groot voor de last-applied annotatie), en wachten tot ze bruikbaar zijn
+	kubectl apply --server-side -f "$(BASEDIR)/traefik-crds.yaml"
+	kubectl wait --for condition=established --timeout=60s -f "$(BASEDIR)/traefik-crds.yaml"
 	kubectl apply -f "$(BASEDIR)/traefik.yaml"
 
 clean:
