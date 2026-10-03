@@ -98,7 +98,7 @@ function PodWatcher(log) {
     this.reset = function () { bekend = {}; };
 }
 
-var MOL_IMG = "assets/img/mole.png";   // pixel-art mol mét eigen put, 264 x 288
+var MOL_IMG = "assets/img/mole_opendag.png";   // mol met helm en eigen put, 264 x 288
 var SPINNER_SVG = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#663366" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9"></path></svg>';
 
 // Bouwt een pod-knop (mol in een gat). naamTekst: wat er als naam onder staat.
