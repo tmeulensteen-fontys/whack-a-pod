@@ -17,7 +17,7 @@ BASEDIR = $(shell pwd)
 include Makefile.properties
 
 deploy:
-	cd "$(BASEDIR)/apps/metallb/" && $(MAKE) deploy
+#	cd "$(BASEDIR)/apps/metallb/" && $(MAKE) deploy
 	cd "$(BASEDIR)/apps/traefik/" && $(MAKE) deploy
 	cd "$(BASEDIR)/apps/api/kubernetes/" && $(MAKE) deploy
 	cd "$(BASEDIR)/apps/game/kubernetes/" && $(MAKE) deploy
@@ -35,4 +35,4 @@ clean:
 	cd "$(BASEDIR)/apps/admin/kubernetes/" && $(MAKE) clean
 	cd "$(BASEDIR)/apps/ingress/" && $(MAKE) clean
 	cd "$(BASEDIR)/apps/traefik/" && $(MAKE) clean
-	cd "$(BASEDIR)/apps/metallb/" && $(MAKE) clean
+#	cd "$(BASEDIR)/apps/metallb/" && $(MAKE) clean

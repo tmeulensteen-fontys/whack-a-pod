@@ -19,4 +19,4 @@ deploy:
 	kubectl apply -f "$(BASEDIR)/metallb-config.yaml"
 
 clean:
-	kubectl delete -f "$(BASEDIR)/metallb-config.yaml"
+	-kubectl delete --ignore-not-found -f "$(BASEDIR)/metallb-config.yaml"

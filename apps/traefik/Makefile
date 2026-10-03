@@ -22,4 +22,5 @@ deploy:
 	kubectl apply -f "$(BASEDIR)/traefik.yaml"
 
 clean:
-	kubectl delete -f "$(BASEDIR)/traefik.yaml"
+	-kubectl delete --ignore-not-found -f "$(BASEDIR)/traefik.yaml"
+	-kubectl delete --ignore-not-found -f "$(BASEDIR)/traefik-crds.yaml"

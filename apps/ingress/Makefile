@@ -19,4 +19,4 @@ deploy:
 	kubectl apply -f "$(BASEDIR)/ingress.yaml"
 
 clean: 
-	kubectl delete -f "$(BASEDIR)/ingress.yaml"
+	-kubectl delete --ignore-not-found -f "$(BASEDIR)/ingress.yaml"
